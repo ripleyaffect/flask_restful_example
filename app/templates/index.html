@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>One Hundred Hours</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="/static/javascript/jquery.js"></script>
+  <script type="text/javascript" src="/static/javascript/moment.js"></script>
+  <script type="text/javascript" src="/static/javascript/index.js"></script>
+</head>
+<body>
+
+  <div class="row center-xs">
+    <div class="navbar success">
+      Example
+    </div>
+
+    <div class="col-xs-9">
+    
+      <h2 class="row start-xs">Create a new project</h2>
+      <form id="new-project-form" accept-charset="utf-8" onsubmit="submitNewProject">
+        <div class="row between-xs">
+          <label class="col-xs-8" for="new-project-title">
+            <div class="row">Title</div>
+            <div class="row">
+              <input class="col-xs-12" type="text" id="new-project-title" name="title" placeholder="Title"/>
+            </div>
+          </label>
+          <label class="col-xs-3" for="new-project-goal">
+            <div class="row">Hours</div>
+            <div class="row">
+              <input class="col-xs-12" type="number" id="new-project-goal" name="goal" value='10'/>
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <textarea class="col-xs-12" id="new-project-description" name="description" placeholder="Description"></textarea>
+        </div>
+        <div class="row end-xs">
+          <button id="new-project-button" class="col-xs-4 success-button" type="submit">
+            Let's do this
+          </button>
+        </div>
+      </form>
+
+      <h2 class="row start-xs">Projects</h2>
+      <div id="projects-list"></div>
+
+    </div>
+  </div>
+  <link rel="stylesheet" type="text/css" href="/static/css/flexboxgrid.css"/>
+  <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+</body>
+</html>

@@ -1,0 +1,125 @@
+
+body {
+  background-color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.navbar {
+  padding: 10px;
+  width: 95%;
+  font-size: 30px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 60px;
+}
+
+.success {
+  background-color: #ada;
+  box-shadow: 0px 1px #9a9; 
+}
+
+.success-button {
+  background-color: #ada;
+  box-shadow: 0px 5px #9a9;
+}
+
+.success-button:focus {
+  box-shadow: 0px 2px #9a9;
+}
+
+.danger {
+  background-color: #c78;
+  color: #fefeff;
+  box-shadow: 0px 5px #a56;
+  text-align: center;
+}
+
+.danger:hover {
+  background-color: #b67;
+}
+
+.danger:focus {
+  background-color: #b67;
+  box-shadow: 0px 2px  #a56;
+}
+
+input, textarea, button {
+  background-color: #eaeaea;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 5px #cfcfcf ;
+  margin-bottom: 15px;
+  font-size: 16px;
+  padding: 10px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+input.error, textarea.error {
+  box-shadow: 0px 5px #c78;
+}
+
+input.error:focus, textarea.error:focus {
+  box-shadow: 0px 2px #a56;
+}
+
+textarea {
+  height: 100px;
+}
+
+
+input:focus, textarea:focus, button:focus {
+  -ms-transform: translate(0px, 3px); /* IE 9 */
+  -webkit-transform: translate(0px, 3px); /* Safari */
+  transform: translate(0px, 3px);
+  outline: none;
+  box-shadow: 0px 2px #cfcfcf ;
+}
+
+.project {
+  margin-bottom: 60px;
+}
+
+.project-progress-bar {
+  height: 30px;
+  position: relative;
+  background-color: #eaeaea;
+  border-radius: 10px;
+  box-shadow: 0px -2px #cfcfcf ;
+}
+
+.project-progress-tooltip {
+  position: absolute;
+  top: -280px;
+  right: 50%;
+  display: block;
+}
+
+.project-progress-fill {
+  height: 103%;
+  position: relative;
+  top: -2px;
+  border-radius: 10px;
+  transition: width 0.2s;
+}
+
+.project-progress-input {
+  margin-right: 15px;
+}
+
+.progress-delete-button {
+  font-size: 20px;
+  position: relative;
+  bottom: 2px;
+  border-bottom-right-radius: 0px; 
+  border-top-right-radius: 0px;
+}
+
+.project-progress-message {
+  background-color: #ee8;
+  box-shadow: 0px 1px #aa1;
+  border-bottom-right-radius: 10px; 
+  border-top-right-radius: 10px;
+  height: 45px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
