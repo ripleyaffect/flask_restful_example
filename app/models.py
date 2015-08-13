@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import datetime
 
 from main import db
+from logger import logger
 
 
 class ModelUtils(object):
@@ -18,6 +19,8 @@ class ModelUtils(object):
         db.session.add(self)
         if commit:
             db.session.commit()
+            logger.info(
+                '{} {} saved'.format(self.__class__.__name__, self.id))
         return self
 
     def delete(self, commit=True):
@@ -31,6 +34,8 @@ class ModelUtils(object):
         db.session.delete(self)
         if commit:
             db.session.commit()
+            logger.info(
+                '{} {} deleted'.format(self.__class__.__name__, self.id))
         return True
 
 
