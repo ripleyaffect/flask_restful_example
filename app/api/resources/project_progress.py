@@ -2,6 +2,7 @@ import uuid
 
 from flask import request, g
 from flask.ext.restful import Resource, abort, marshal_with
+from flask_restful_swagger import swagger
 
 from models import ProjectProgress
 from logger import logger
@@ -38,8 +39,7 @@ def request_id_dec(func):
         return val
     return inner
 
-
-class ProjectProgressResource(Resource):
+class ProjectProgressListResource(Resource):
     decorators = [request_id_dec, logging_dec]
 
     @marshal_with(ProjectProgress.API_REPRESENTATION)
@@ -60,6 +60,10 @@ class ProjectProgressResource(Resource):
             project_id=project_id,
             value=request.json.get('value'),
             note=request.json.get('note')).save()]
+
+
+class ProjectProgressResource(Resource):
+    decorators = [request_id_dec, logging_dec]
 
     def delete(self, project_id, project_progress_id):
         project_progress = ProjectProgress.query.get(project_progress_id)

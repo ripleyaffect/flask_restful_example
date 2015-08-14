@@ -1,7 +1,10 @@
-from project import ProjectResource
-from project_progress import ProjectProgressResource
+from project import ProjectResource, ProjectListResource
+from project_progress import (
+  ProjectProgressResource, ProjectProgressListResource)
 
 __all__ = [
     'ProjectResource',
-    'ProjectProgressResource'
+    'ProjectListResource',
+    'ProjectProgressResource',
+    'ProjectProgressListResource'
 ]

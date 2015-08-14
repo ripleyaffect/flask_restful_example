@@ -208,8 +208,6 @@ var submitNewProjectProgress = function submitNewProjectProgress(projectId) {
       },
       dataType: 'json'});
   $('.project-progress-submit-button').blur()
-
-
 }
 
 $(document).ready(function () {
