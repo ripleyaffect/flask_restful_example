@@ -1,7 +1,7 @@
 import uuid
 
 from flask import request, g
-from flask.ext.restful import Resource, abort, marshal_with
+from flask.ext.restful import Resource, abort, marshal
 from flask_restful_swagger import swagger
 
 from models import ProjectProgress
@@ -21,7 +21,7 @@ def colorify(text, color=''):
         return text
     return '{}{}\033[0m'.format(colors[color], text)
 
-# 
+
 def logging_dec(func):
     def inner(*args, **kwargs):
         logger.info(colorify('Here comes the request!', 'OKBLUE'))
@@ -42,7 +42,6 @@ def request_id_dec(func):
 class ProjectProgressListResource(Resource):
     decorators = [request_id_dec, logging_dec]
 
-    @marshal_with(ProjectProgress.API_REPRESENTATION)
     def post(self, project_id):
         if request.json is None:
             abort(400, error='No data provided')
@@ -56,10 +55,12 @@ class ProjectProgressListResource(Resource):
                 error='Missing field{}: {}'.format(
                     's' if len(missing_fields) > 1 else '', missing_fields))
 
-        return [ProjectProgress(
-            project_id=project_id,
-            value=request.json.get('value'),
-            note=request.json.get('note')).save()]
+        return marshal(
+            [ProjectProgress(
+                project_id=project_id,
+                value=request.json.get('value'),
+                note=request.json.get('note')).save()],
+            ProjectProgress.API_REPRESENTATION), 201  # Created
 
 
 class ProjectProgressResource(Resource):
@@ -80,4 +81,4 @@ class ProjectProgressResource(Resource):
 
         project_progress.delete()
 
-        return ''
+        return '', 204  # No content

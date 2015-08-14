@@ -100,7 +100,7 @@ var deleteProject = function deleteProject(projectId) {
       type: 'DELETE',
       url: '/api/projects/' + projectId,
       success: function(data, status, response) {
-        response.status === 200 ? removeProject(projectId) : console.log(data)
+        response.status === 204 ? removeProject(projectId) : console.log(data)
       }
     });
   }
@@ -114,7 +114,7 @@ var deleteProgress = function deleteProgress(projectId, progressId, value) {
       type: 'DELETE',
       url: '/api/projects/' + projectId + '/progress/' + progressId,
       success: function(data, status, response) {
-        response.status === 200 ?
+        response.status === 204 ?
           removeProgress(projectId, progressId, value) : console.log(data)
       }
     });
@@ -185,9 +185,15 @@ var submitNewProject = function submitNewProject(event) {
       url: '/api/projects',
       data: JSON.stringify(data),
       contentType: "application/json; charset=utf-8",
-      success: function(data) {
-        addProjects(data);
-        clearProjectFields();
+      success: function(data, status, response) {
+        if (response.status === 201) {
+          addProjects(data);
+          clearProjectFields();
+        }
+        else {
+          console.log('There was a problem creating a new project:');
+          console.log(data);
+        }
       },
       dataType: 'json'});
   }
@@ -202,9 +208,15 @@ var submitNewProjectProgress = function submitNewProjectProgress(projectId) {
       url: '/api/projects/' + projectId + '/progress',
       data: JSON.stringify(data),
       contentType: "application/json; charset=utf-8",
-      success: function(data) {
-        addProgress(projectId, data);
-        setProgressBar(projectId);
+      success: function(data, status, response) {
+        if (response.status === 201) {
+          addProgress(projectId, data);
+          setProgressBar(projectId);
+        }
+        else {
+          console.log('There was a problem creating a new project:');
+          console.log(data);
+        }
       },
       dataType: 'json'});
   $('.project-progress-submit-button').blur()

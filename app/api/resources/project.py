@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource, abort, marshal_with, marshal, fields
+from flask_restful import Resource, abort, marshal, marshal_with
 from flask_restful_swagger import swagger
 
 from models import Project, ProjectProgress
@@ -45,7 +45,6 @@ class ProjectListResource(Resource):
             }
           ]
         )
-    @marshal_with(Project.API_REPRESENTATION)
     def post(self, **kwargs):
         if request.json is None:
             abort(400, error='No data provided')
@@ -58,11 +57,13 @@ class ProjectListResource(Resource):
                 error='Missing field{}: {}'.format(
                     's' if len(missing_fields) > 1 else '', missing_fields))
 
-        return [Project(
-            title=request.json.get('title'),
-            description=request.json.get('description'),
-            goal=request.json.get('goal'),
-            unit=request.json.get('unit')).save()]
+        return marshal(
+            [Project(
+                title=request.json.get('title'),
+                description=request.json.get('description'),
+                goal=request.json.get('goal'),
+                unit=request.json.get('unit')).save()],
+            Project.API_REPRESENTATION), 201  # Created
 
 
 class ProjectResource(Resource):
@@ -191,4 +192,4 @@ class ProjectResource(Resource):
 
         project.delete()
 
-        return ''
+        return '', 204  # No content
