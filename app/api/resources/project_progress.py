@@ -1,10 +1,48 @@
-from flask import request
-from flask.ext.restful import Resource, abort
+import uuid
+
+from flask import request, g
+from flask.ext.restful import Resource, abort, marshal_with
 
 from models import ProjectProgress
+from logger import logger
+
+def colorify(text, color=''):
+    colors = {
+        'HEADER': '\033[95m',
+        'OKBLUE': '\033[94m',
+        'OKGREEN': '\033[92m',
+        'WARNING': '\033[93m',
+        'FAIL': '\033[91m',
+        'BOLD': '\033[1m',
+        'UNDERLINE': '\033[4m'}
+    color = color.upper()
+    if color not in colors:
+        return text
+    return '{}{}\033[0m'.format(colors[color], text)
+
+# 
+def logging_dec(func):
+    def inner(*args, **kwargs):
+        logger.info(colorify('Here comes the request!', 'OKBLUE'))
+        val = func(*args, **kwargs)
+        logger.info(colorify('There goes the request!', 'OKBLUE'))
+        return val
+    return inner
+
+def request_id_dec(func):
+    def inner(*args, **kwargs):
+        g.request_id = uuid.uuid4()
+        logger.info(colorify('Request given id: {}'.format(g.request_id), 'OKGREEN'))
+        val = func(*args, **kwargs)
+        logger.info(colorify('Request with Id {} completed'.format(g.request_id), 'OKGREEN'))
+        return val
+    return inner
 
 
 class ProjectProgressResource(Resource):
+    decorators = [request_id_dec, logging_dec]
+
+    @marshal_with(ProjectProgress.API_REPRESENTATION)
     def post(self, project_id):
         if request.json is None:
             abort(400, error='No data provided')
@@ -21,7 +59,7 @@ class ProjectProgressResource(Resource):
         return [ProjectProgress(
             project_id=project_id,
             value=request.json.get('value'),
-            note=request.json.get('note')).save().to_dict()], 201  # Created
+            note=request.json.get('note')).save()]
 
     def delete(self, project_id, project_progress_id):
         project_progress = ProjectProgress.query.get(project_progress_id)
@@ -38,4 +76,4 @@ class ProjectProgressResource(Resource):
 
         project_progress.delete()
 
-        return '', 204  # No content
+        return ''

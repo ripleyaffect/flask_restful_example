@@ -1,17 +1,21 @@
-from flask.ext.restful import Resource, abort
+from flask import request
+from flask_restful import Resource, abort, marshal_with, marshal, fields
 
 from models import Project, ProjectProgress
 
 class ProjectResource(Resource):
-    def get(self, project_id=None):
+
+    @marshal_with(Project.API_REPRESENTATION)
+    def get(self, project_id=None, **kwargs):
         project_query = Project.query
 
         if project_id:
             project_query = project_query.filter(Project.id == project_id)
 
-        return [p.to_dict() for p in project_query.all()]
+        return project_query.all()
 
-    def post(self):
+    @marshal_with(Project.API_REPRESENTATION)
+    def post(self, **kwargs):
         if request.json is None:
             abort(400, error='No data provided')
 
@@ -27,9 +31,10 @@ class ProjectResource(Resource):
             title=request.json.get('title'),
             description=request.json.get('description'),
             goal=request.json.get('goal'),
-            unit=request.json.get('unit')).save().to_dict()], 201  # Created
+            unit=request.json.get('unit')).save()]
 
-    def put(self, project_id=None):
+    @marshal_with(Project.API_REPRESENTATION)
+    def put(self, project_id=None, **kwargs):
         if project_id is None:
             abort(400, error='No project id specified')
 
@@ -50,9 +55,9 @@ class ProjectResource(Resource):
         project.goal = request.json.get('goal')
         project.unit = request.json.get('unit')
 
-        return [project.save().to_dict()]
+        return [project.save()]
 
-    def delete(self, project_id=None):
+    def delete(self, project_id=None, **kwargs):
         if project_id is None:
             abort(400, error='No project id specified')
 
@@ -62,4 +67,4 @@ class ProjectResource(Resource):
 
         project.delete()
 
-        return '', 204  # No content
+        return ''

@@ -100,7 +100,7 @@ var deleteProject = function deleteProject(projectId) {
       type: 'DELETE',
       url: '/api/projects/' + projectId,
       success: function(data, status, response) {
-        response.status === 204 ? removeProject(projectId) : console.log(data)
+        response.status === 200 ? removeProject(projectId) : console.log(data)
       }
     });
   }
@@ -114,7 +114,7 @@ var deleteProgress = function deleteProgress(projectId, progressId, value) {
       type: 'DELETE',
       url: '/api/projects/' + projectId + '/progress/' + progressId,
       success: function(data, status, response) {
-        response.status === 204 ?
+        response.status === 200 ?
           removeProgress(projectId, progressId, value) : console.log(data)
       }
     });
@@ -128,6 +128,7 @@ var clearProjectFields = function clearProjectFields() {
   $("#new-project-goal")[0].value = 10;
   $("#new-project-description")[0].value = ''
 }
+
 
 var validateNewProject = function validateNewProject (project) {
   var newProjectTitle = $("#new-project-title")
