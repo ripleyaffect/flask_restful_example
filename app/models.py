@@ -67,21 +67,6 @@ class ProjectProgress(db.Model, ModelUtils):
         'notes': fields.String
     }
 
-    def to_dict(self):
-        """Return a dictionary representation of this instance
-
-        `datetime` objects are turned into isoformt `str`s if present
-
-        """
-        return {
-            'id': self.id,
-            'created_asof': self.created_asof.isoformat(),
-            'updated_asof': (
-                self.updated_asof.isoformat() if self.updated_asof else None),
-            'project_id': self.project_id,
-            'value': self.value,
-            'note': self.note}
-
 
 class Project(db.Model, ModelUtils):
     __tablename__ = 'project'
@@ -109,22 +94,3 @@ class Project(db.Model, ModelUtils):
         'unit': fields.String,
         'progress': fields.Nested(ProjectProgress.API_REPRESENTATION)
     }
-
-    def to_dict(self):
-        """Return a dictionary representation of this instance
-
-        `datetime` objects are turned into isoformt `str`s if present
-
-        """
-        return {
-            'id': self.id,
-            'created_asof': self.created_asof.isoformat(),
-            'updated_asof': (
-                self.updated_asof.isoformat() if self.updated_asof else None),
-            'title': self.title,
-            'description': self.description,
-            'goal': self.goal,
-            'unit': self.unit,
-            'progress': [p.to_dict() for p in self.progress]}
-
-

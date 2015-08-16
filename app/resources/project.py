@@ -11,12 +11,12 @@ class ProjectListResource(Resource):
         nickname='get_project_list',
         responseMessages=[
             {
-              "code": 200,
-              "message": "OK. The projects were successfully returned"
+              'code': 200,
+              'message': 'OK. The projects were successfully returned'
             }
           ]
         )
-    @marshal_with(Project.API_REPRESENTATION)
+    @marshal_with(Project.API_REPRESENTATION, envelope='projects')
     def get(self, **kwargs):
         return Project.query.all()
 
@@ -25,22 +25,22 @@ class ProjectListResource(Resource):
         nickname='post_project_list',
         parameters=[
             {
-                "allowMultiple": False,
-                "dataType": "Project",
-                "description": "A Project representation",
-                "name": "body",
-                "paramType": "body",
-                "required": True
+                'allowMultiple': False,
+                'dataType': 'Project',
+                'description': 'A Project representation',
+                'name': 'body',
+                'paramType': 'body',
+                'required': True
             }
         ],
         responseMessages=[
             {
-              "code": 200,
-              "message": "OK. The projects were successfully created"
+              'code': 200,
+              'message': 'OK. The projects were successfully created'
             },
             {
-              "code": 400,
-              "message": (
+              'code': 400,
+              'message': (
                 'Bad request. Some fields were missing from the request')
             }
           ]
@@ -63,7 +63,7 @@ class ProjectListResource(Resource):
                 description=request.json.get('description'),
                 goal=request.json.get('goal'),
                 unit=request.json.get('unit')).save()],
-            Project.API_REPRESENTATION), 201  # Created
+            Project.API_REPRESENTATION, envelope='projects'), 201  # Created
 
 
 class ProjectResource(Resource):
@@ -72,27 +72,27 @@ class ProjectResource(Resource):
         nickname='get_project',
         parameters=[
             {
-              "name": "project_id",
-              "description": "Id of the project to return",
-              "required": True,
-              "allowMultiple": False,
-              "dataType": 'integer',
-              "paramType": "path"
+              'name': 'project_id',
+              'description': 'Id of the project to return',
+              'required': True,
+              'allowMultiple': False,
+              'dataType': 'integer',
+              'paramType': 'path'
             }
           ],
         responseMessages=[
             {
-              "code": 200,
-              "message": "OK. The project was successfully returned"
+              'code': 200,
+              'message': 'OK. The project was successfully returned'
             },
             {
-              "code": 404,
-              "message": (
-                "Not found. The project with the requested Id was not found")
+              'code': 404,
+              'message': (
+                'Not found. The project with the requested Id was not found')
             }
           ]
         )
-    @marshal_with(Project.API_REPRESENTATION)
+    @marshal_with(Project.API_REPRESENTATION, envelope='project')
     def get(self, project_id=None, **kwargs):
         project_query = Project.query.filter(Project.id == project_id)
 
@@ -106,40 +106,40 @@ class ProjectResource(Resource):
         nickname='put_project',
         parameters=[
             {
-              "name": "project_id",
-              "description": "Id of the project to replace",
-              "required": True,
-              "allowMultiple": False,
-              "dataType": 'integer',
-              "paramType": "path"
+              'name': 'project_id',
+              'description': 'Id of the project to replace',
+              'required': True,
+              'allowMultiple': False,
+              'dataType': 'integer',
+              'paramType': 'path'
             },
             {
-                "allowMultiple": False,
-                "dataType": "Project",
-                "description": "A Project representation",
-                "name": "body",
-                "paramType": "body",
-                "required": True
+                'allowMultiple': False,
+                'dataType': 'Project',
+                'description': 'A Project representation',
+                'name': 'body',
+                'paramType': 'body',
+                'required': True
             }
           ],
           responseMessages=[
             {
-              "code": 200,
-              "message": "OK. The project was successfully returned"
+              'code': 200,
+              'message': 'OK. The project was successfully returned'
             },
             {
-              "code": 400,
-              "message": (
+              'code': 400,
+              'message': (
                 'Bad request. Some fields were missing from the request')
             },
             {
-              "code": 404,
-              "message": (
-                "Not found. The project with the requested Id was not found")
+              'code': 404,
+              'message': (
+                'Not found. The project with the requested Id was not found')
             }
           ]
         )
-    @marshal_with(Project.API_REPRESENTATION)
+    @marshal_with(Project.API_REPRESENTATION, envelope='project')
     def put(self, project_id=None, **kwargs):
         missing_fields = list(
              set(Project.REQUIRED_PUT_FIELDS) - set(request.json.keys()))
@@ -151,7 +151,7 @@ class ProjectResource(Resource):
 
         project = Project.query.get(project_id)
         if project is None:
-            abort(404, error="No project with id {}".format(project_id))
+            abort(404, error='No project with id {}'.format(project_id))
 
         project.title = request.json.get('title')
         project.description = request.json.get('description')
@@ -165,30 +165,30 @@ class ProjectResource(Resource):
         nickname='delete_project',
         parameters=[
             {
-              "name": "project_id",
-              "description": "Id of the project to delete",
-              "required": True,
-              "allowMultiple": False,
-              "dataType": 'integer',
-              "paramType": "path"
+              'name': 'project_id',
+              'description': 'Id of the project to delete',
+              'required': True,
+              'allowMultiple': False,
+              'dataType': 'integer',
+              'paramType': 'path'
             }
           ],
           responseMessages=[
             {
-              "code": 200,
-              "message": "OK. The project was successfully returned"
+              'code': 200,
+              'message': 'OK. The project was successfully returned'
             },
             {
-              "code": 404,
-              "message": (
-                "Not found. The project with the requested Id was not found")
+              'code': 404,
+              'message': (
+                'Not found. The project with the requested Id was not found')
             }
           ]
         )
     def delete(self, project_id=None, **kwargs):
         project = Project.query.get(project_id)
         if project is None:
-            abort(404, error="No project with id {}".format(project_id))
+            abort(404, error='No project with id {}'.format(project_id))
 
         project.delete()
 

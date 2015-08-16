@@ -4,7 +4,6 @@
 var projectProgressStore = {}
 
 var calculateProgress = function calculateProgress(projectId) {
-  console.log(projectProgressStore);
   if (projectProgressStore[projectId]) {
     return Math.min(
       projectProgressStore[projectId].totalProgress /
@@ -95,30 +94,26 @@ var removeProgress = function removeProgress(projectId, progressId, value) {
 
 
 var deleteProject = function deleteProject(projectId) {
-  if (confirm('Are you sure you want to remove this project?')) {
-    $.ajax({
-      type: 'DELETE',
-      url: '/api/projects/' + projectId,
-      success: function(data, status, response) {
-        response.status === 204 ? removeProject(projectId) : console.log(data)
-      }
-    });
-  }
+  $.ajax({
+    type: 'DELETE',
+    url: '/api/projects/' + projectId,
+    success: function(data, status, response) {
+      response.status === 204 ? removeProject(projectId) : console.log(data)
+    }
+  });
   $('.project-delete-button').blur();
 };
 
 
 var deleteProgress = function deleteProgress(projectId, progressId, value) {
-  if (confirm('Are you sure you want to remove this progress?')) {
-    $.ajax({
-      type: 'DELETE',
-      url: '/api/projects/' + projectId + '/progress/' + progressId,
-      success: function(data, status, response) {
-        response.status === 204 ?
-          removeProgress(projectId, progressId, value) : console.log(data)
-      }
-    });
-  }
+  $.ajax({
+    type: 'DELETE',
+    url: '/api/projects/' + projectId + '/progress/' + progressId,
+    success: function(data, status, response) {
+      response.status === 204 ?
+        removeProgress(projectId, progressId, value) : console.log(data)
+    }
+  });
   $('.progress-delete-button').blur();
 };
 
@@ -187,7 +182,7 @@ var submitNewProject = function submitNewProject(event) {
       contentType: "application/json; charset=utf-8",
       success: function(data, status, response) {
         if (response.status === 201) {
-          addProjects(data);
+          addProjects(data.projects);
           clearProjectFields();
         }
         else {
@@ -210,11 +205,11 @@ var submitNewProjectProgress = function submitNewProjectProgress(projectId) {
       contentType: "application/json; charset=utf-8",
       success: function(data, status, response) {
         if (response.status === 201) {
-          addProgress(projectId, data);
+          addProgress(projectId, data.progress);
           setProgressBar(projectId);
         }
         else {
-          console.log('There was a problem creating a new project:');
+          console.log('There was a problem creating a new progress:');
           console.log(data);
         }
       },
@@ -223,8 +218,10 @@ var submitNewProjectProgress = function submitNewProjectProgress(projectId) {
 }
 
 $(document).ready(function () {
-  $.get('/api/projects', function (data) {
-    addProjects(data)
+  $.get('/api/projects', function (data, status, response) {
+    if (response.status === 200) {
+      addProjects(data.projects)
+    }
   })
 
   $("#new-project-form").submit(submitNewProject);
